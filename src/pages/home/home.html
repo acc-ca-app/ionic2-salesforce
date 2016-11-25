@@ -5,7 +5,6 @@
 </ion-header>
 
 <ion-content padding>
-  <button (click)="authorize()" *ngIf="!credentials">authorize</button>
   <ion-list>
     <ion-item *ngFor="let account of accounts">
       {{account.Name}}

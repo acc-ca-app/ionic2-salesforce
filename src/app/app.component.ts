@@ -1,24 +1,21 @@
-import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Platform } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { Platform, Nav } from 'ionic-angular';
 import { StatusBar, Splashscreen } from 'ionic-native';
 import { StoreService } from '../core';
 
 import { TabsPage } from '../pages/tabs/tabs';
+import { LoginPage } from '../pages/login/login';
 
 
 @Component({
-  template: `<ion-nav #rootNavController [root]="rootPage">
-    <router-outlet></router-outlet>
-  </ion-nav>`
+  template: `<ion-nav [root]="rootPage"></ion-nav>`
 })
 export class MyApp {
-  sub: any
+  @ViewChild(Nav) nav: Nav;
   rootPage = TabsPage;
 
   constructor(
-    private platform: Platform, 
-    private route: ActivatedRoute,
+    private platform: Platform,
     private store: StoreService) {
 
     platform.ready().then(() => {
@@ -29,22 +26,15 @@ export class MyApp {
     });
   }
 
-  ngOnInit() {
-    this.sub = this.route.fragment.subscribe(fragments => {
-      console.log('fragments', JSON.parse(JSON.stringify(fragments)))
-      if(fragments) {
-        const result = {}
-        for(let fragment of fragments.split('&')) {
-          let key = fragment.split('=')[0]
-          let value = fragment.split('=')[1]
-          result[ window.decodeURIComponent(key) ] = window.decodeURIComponent(value)
-        }
-        this.store.create('credentials', result)
-      }
+  ngAfterViewInit() {
+    console.log('going on the login page')
+    this.nav.push(LoginPage);
+
+    this.nav.viewDidEnter.subscribe((event) => {
+      console.log('viewDidEnter', event)
     })
   }
 
-  ngOnDestroy() {
-    this.sub.unsubscribe()
-  }
+
+
 }

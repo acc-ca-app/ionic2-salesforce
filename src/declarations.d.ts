@@ -15,4 +15,5 @@ declare module '*';
 
 interface Window {
   decodeURIComponent: any;
+  cordova: any;
 }

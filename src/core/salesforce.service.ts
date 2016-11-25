@@ -4,6 +4,7 @@ import {Observable} from 'rxjs/Observable';
 import { StoreService } from './store.service';
 import 'rxjs/add/operator/map'
 import 'rxjs/add/operator/catch'
+import 'rxjs/add/observable/throw'
 
 @Injectable()
 export class SalesforceService {
@@ -18,21 +19,19 @@ export class SalesforceService {
     headers.append('Content-Type', 'application/json');
 
     let credentials = this.store.read('credentials');
-    if(credentials) {
-      credentials = credentials[0];
+    console.log('credentials', credentials)
+    if(!credentials) {
+      return Observable.throw('Not Authentified')
     }
+    credentials = credentials[0];
 
-    if (credentials) {
-      headers.append('Authorization', 'Bearer ' + credentials.access_token);
-    } else {
-      throw 'Not Authentified';
-    }
+    headers.append('Authorization', 'Bearer ' + credentials.access_token);
 
     let parameters: string[] = []
     for (var param in params) {
       parameters.push(param + '=' + (typeof params[param] === 'object' ? JSON.stringify(params[param]) : params[param]))
     }
-    url = '/services/data/v38.0/' + url + (parameters ? '?' : '') + parameters.join('&')
+    url = (window.cordova?credentials.instance_url:'') + '/services/data/v38.0/' + url + (parameters ? '?' : '') + parameters.join('&')
 
     let request = new Request({
       headers: headers,
