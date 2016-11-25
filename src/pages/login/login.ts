@@ -3,6 +3,7 @@ import { NavController, NavParams } from 'ionic-angular';
 import { StoreService } from '../../core'
 import { InAppBrowser } from 'ionic-native';
 import { HomePage } from '../home/home'
+import { TabsPage } from '../tabs/tabs';
 
 @Component({
   selector: 'login',
@@ -44,7 +45,7 @@ export class LoginPage {
     this.store.create('credentials', credentials)
     console.log('Redirecting to Home')
 
-    this.navCtrl.push(HomePage);
+    this.navCtrl.setRoot(TabsPage);
   }
 
   authorize() {

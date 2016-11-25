@@ -29,7 +29,7 @@ export class MyApp {
 
   ngAfterViewInit() {
     console.log('going on the login page', window.location.hash)
-    this.nav.push(LoginPage, {
+    this.nav.setRoot(LoginPage, {
       hash: window.location.hash
     });
 
