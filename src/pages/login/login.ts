@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, NavParams } from 'ionic-angular';
 import { StoreService } from '../../core'
 import { InAppBrowser } from 'ionic-native';
 import { HomePage } from '../home/home'
@@ -17,12 +17,13 @@ export class LoginPage {
 
   constructor(
     private store: StoreService,
-    public navCtrl: NavController) {}
+    private navCtrl: NavController,
+    private params: NavParams) {}
 
   ngOnInit() {
     console.log('ngOnInit login', window.location.hash)
 
-    const fragments = window.location.hash
+    const fragments = this.params.get('hash') || window.location.hash
     if(fragments && fragments.indexOf('access_token') > -1) {
       //we remove the '#'
       this.handleFragments(fragments.substring(1));
